@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "package": "cc.unilock.mnamixin.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "mixins": [
+    "GlobalLootModifiersMixin",
+    "RandomArtifactSpellMixin",
+    "RandomConstructPartMixin",
+    "RandomHatMixin",
+    "RandomJokeSpellMixin",
+    "RandomJournalPageMixin",
+    "RandomManaweaveRecipeMixin",
+    "RandomRunescribeRecipeMixin",
+    "RandomSilverSpellMixin",
+    "RandomSpellStaffMixin",
+    "RandomThaumaturgicLinkMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

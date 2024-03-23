@@ -1,0 +1,126 @@
+plugins {
+    id "dev.architectury.loom" version "1.5-SNAPSHOT"
+    id "maven-publish"
+}
+
+base {
+    archivesName = project.archives_base_name
+}
+
+version = project.mod_version
+group = project.maven_group
+
+loom {
+    forge {
+        mixinConfigs = [
+            "mnamixin.mixins.json"
+        ]
+    }
+}
+
+repositories {
+    maven {
+        name = "NeoForged"
+        url = "https://maven.neoforged.net/releases/"
+    }
+    maven {
+        name = "ParchmentMC"
+        url = "https://maven.parchmentmc.org/"
+    }
+    maven {
+        name = "GeckoLib"
+        url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
+        content {
+            includeGroupByRegex "software\\.bernie.*"
+            includeGroup "com.eliotlash.mclib"
+        }
+    }
+    maven {
+        name = "Curse Maven"
+        url = "https://cursemaven.com/"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven/"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_mappings}@zip")
+    }
+    forge "net.neoforged:forge:${project.forge_version}"
+
+    modImplementation "maven.modrinth:mana-and-artifice:${project.mna_version}"
+
+    modRuntimeOnly "curse.maven:roughly-enough-resources-325625:${project.rer_version}"
+    modRuntimeOnly "maven.modrinth:architectury-api:${project.architectury_version}"
+    modRuntimeOnly "maven.modrinth:cloth-config:${project.clothconfig_version}"
+    modRuntimeOnly "maven.modrinth:curios:${project.curios_version}"
+    modRuntimeOnly "maven.modrinth:rei:${project.rei_version}"
+    modRuntimeOnly "maven.modrinth:roughly-enough-items-hacks:${project.reihacks_version}"
+    modRuntimeOnly "software.bernie.geckolib:geckolib-forge-1.20.1:${project.geckolib_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release = 17
+}
+
+java {
+    withSourcesJar()
+
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${base.archivesName.get()}" }
+    }
+
+    manifest {
+        attributes([
+                "Specification-Title"     : project.mod_id,
+                "Specification-Vendor"    : project.mod_author,
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : version,
+                "Implementation-Vendor"   : project.mod_author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+// Configure the maven publication
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
+    }
+}

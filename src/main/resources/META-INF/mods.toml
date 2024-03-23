@@ -1,0 +1,33 @@
+modLoader = "lowcodefml"
+loaderVersion = "[47,)"
+license = "MIT"
+
+[[mods]]
+modId = "mnamixin"
+version = "${version}"
+displayName = "MNAMixin"
+authors="unilock"
+description = '''
+Fix Mana and Artifice with Roughly Enough Resources
+'''
+
+[[dependencies.mnamixin]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mnamixin]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mnamixin]]
+modId = "mna"
+mandatory = true
+versionRange = "[3.0.0.0,)"
+ordering = "NONE"
+side = "BOTH"
